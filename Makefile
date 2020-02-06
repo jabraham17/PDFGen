@@ -9,7 +9,11 @@ GREEN=\033[0;32m
 RED=\033[0;31m
 COLOR_OFF=\033[0m
 
-all: loadLibs
+all: build
+	rm -f $(TARGET)
+	ln -s dist/$(TARGET) $(TARGET)
+
+build: loadLibs
 	@if [ -f $(TARGET).spec ] ; \
 	then \
 		echo "$(GREEN)Building from spec file$(COLOR_OFF)"; \
@@ -19,8 +23,10 @@ all: loadLibs
 		$(PYINSTALL) --onefile --name $(TARGET) $(MAIN); \
 	fi; \
 
-	rm -f $(TARGET)
-	ln -s dist/$(TARGET) $(TARGET)
+
+# zip -j PDFGen.zip dist/pdfgen
+package: build
+	
 
 run: loadLibs
 	$(PYTHON) $(MAIN)
